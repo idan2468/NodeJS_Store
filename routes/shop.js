@@ -25,7 +25,7 @@ router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 router.get('/checkout', isAuth, shopController.getCheckout);
 
 // /success => GET
-router.post('/checkout/success', isAuth, shopController.getCheckoutSuccess);
+router.get('/checkout/success', isAuth, shopController.getCheckoutSuccess);
 
 // /cancel => GET
 router.get('/checkout/cancel', isAuth, shopController.getCheckout);

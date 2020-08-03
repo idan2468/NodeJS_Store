@@ -1,5 +1,4 @@
 // Includes //
-// const https = require('https');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
@@ -49,8 +48,6 @@ const mongoStore = new mongoDBStore({
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'});
 
-// const privateKey = fs.readFileSync('server.key');
-// const certificate = fs.readFileSync('server.cert');
 
 /**
  * Set views and view engine
@@ -58,7 +55,9 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'),
 app.set("view engine", "ejs");
 app.set("views", "views");
 
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: false
+}));
 app.use(compression());
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -136,6 +135,5 @@ app.use((error, req, res, next) => {
  */
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true})
     .then((res) => {
-        // https.createServer({key: privateKey, cert: certificate}, app)
         app.listen(process.env.PORT || 3000);
     });
