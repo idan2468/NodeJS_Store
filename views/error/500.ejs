@@ -1,0 +1,11 @@
+<%- include('../includes/head.ejs') %>
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+    <h1 style="background-color: #ff0008">Error!!, Please try again.</h1>
+    <% if(isAuth) {%>
+        <p> <%= errorMessage %> </p>
+    <% } %>
+
+    <%- include('../includes/end.ejs') %>

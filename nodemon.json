@@ -1,0 +1,12 @@
+{
+  "env": {
+    "MONGO_URI": "mongodb+srv://idan2468:0509496620@idans-xvear.mongodb.net/shop?retryWrites=true&w=majority",
+    "MONGO_USER": "idan2468",
+    "MONGO_PASS": "0509496620",
+    "STRIPE_KEY": "sk_test_51H5H7rB1GUAsMrxk6UwMyWnhGtAAHHD7fpWvxnaF8fMFn1YyC2vDppLBFejZTbX5Ry4vTndIpBpguYabDAnpty5M00BmDgXPKj",
+    "MONGO_DB": "shop",
+    "ADMIN_EMAIL": "idans2468@gmail.com",
+    "SEND_GRID_API_KEY": "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",
+    "NODE_ENV": "production"
+  }
+}

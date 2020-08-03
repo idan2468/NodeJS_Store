@@ -1,0 +1,38 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+
+<body>
+<%- include('../includes/navigation.ejs') %>
+
+<main>
+    <form class="login-form" action="/signup" method="POST" novalidate>
+        <% if (errorMessage) { %>
+            <div class="user-message user-message--error"><%= errorMessage %> </div>
+        <% } %>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-control">
+            <label for="email">E-Mail</label>
+            <input class="<%= errorFields["email"] ? 'invalid' : '' %>" type="email" name="email" id="email"
+                   value="<%= oldValues['email'] %>">
+        </div>
+        <div class="form-control">
+            <label for="username">Username</label>
+            <input class="<%= errorFields["username"] ? 'invalid' : '' %>" type="text" name="username" id="username"
+                   value="<%= oldValues['username'] %>">
+        </div>
+        <div class="form-control">
+            <label for="password">Password</label>
+            <input class="<%= errorFields["password"] ? 'invalid' : '' %>" type="password" name="password"
+                   id="password">
+        </div>
+        <div class="form-control">
+            <label for="confirmPassword">Confirm Password</label>
+            <input class="<%= errorFields["confirmPassword"] ? 'invalid' : '' %>" type="password" name="confirmPassword"
+                   id="confirmPassword">
+        </div>
+        <button class="btn" type="submit">Register</button>
+    </form>
+</main>
+<%- include('../includes/end.ejs') %>
