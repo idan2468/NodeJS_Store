@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Validations //
 
-const productFieldsValidation = [check('title', 'Invalid Title').trim().isAlphanumeric(),
+const productFieldsValidation = [check('title', 'Invalid Title').trim().notEmpty(),
     check('description', 'No description').notEmpty(),
     check('price', "Price must be numeric").isNumeric().toFloat()]
 
