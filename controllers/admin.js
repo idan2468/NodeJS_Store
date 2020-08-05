@@ -1,5 +1,6 @@
 const {validationResult} = require("express-validator");
 const Product = new require("../models/product");
+const path = require('path');
 const User = new require('../models/user');
 const Order = new require('../models/order');
 const errorHandlers = require('../util/errorHandlers');
@@ -111,7 +112,8 @@ exports.postEditProduct = async (req, res, next) => {
     }
     let filePath = await Product.findById(req.body.productId);
     if (req.file) {
-        fs.unlink(filePath.path, err => err ? next(new Error(err)) : null);
+        filePath = path.join(__dirname, '..', filePath.imageUrl);
+        fs.unlink(filePath, err => err ? console.log(err) : null);
         filePath = req.file.path
     } else {
         filePath = filePath.imageUrl;
@@ -155,7 +157,8 @@ exports.deleteProduct = async (req, res, next) => {
     try {
         const productToDelete = await Product.findById(prodId);
         removeRef(productToDelete);
-        fs.unlink(productToDelete.imageUrl, err => err ? next(new Error(err)) : null);
+        const filePath = path.join(__dirname, '..', productToDelete.imageUrl);
+        fs.unlink(filePath, err => err ? console.log(err) : null);
         await Product.findByIdAndDelete(prodId);
         res.status(200).json({message: "Success"});
     } catch (e) {
