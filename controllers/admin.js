@@ -54,7 +54,7 @@ exports.postAddProduct = async (req, res, next) => {
         userId: userId,
         price: price,
         description: description,
-        imageUrl: image.path
+        imageUrl: image.path.replace('\\', '/')
     });
     newProduct.save().then(() => res.redirect("/admin/products"))
         .catch(err => next(new Error(err)));
@@ -122,7 +122,7 @@ exports.postEditProduct = async (req, res, next) => {
         title: req.body.title,
         price: req.body.price,
         description: req.body.description,
-        imageUrl: filePath
+        imageUrl: filePath.replace('\\', '/')
     })
         .then(() => {
             res.redirect("/admin/products");
