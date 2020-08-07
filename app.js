@@ -61,6 +61,8 @@ app.use(helmet({
 app.use(compression());
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(flash());
+app.use(multer({storage: fileStorage, fileFilter: fileFilterFunc}).single('image'));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/images', express.static(path.join(__dirname, "images")));
 
@@ -76,8 +78,6 @@ app.use(session({
 
 
 app.use(csrfProtection);
-app.use(flash());
-app.use(multer({storage: fileStorage, fileFilter: fileFilterFunc}).single('image'));
 
 /**
  * Handle getting mongoose user object by the current session
