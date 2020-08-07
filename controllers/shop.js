@@ -198,10 +198,11 @@ exports.getCheckout = async (req, res, next) => {
         cancel_url: req.protocol + "://" + req.get('host') + '/checkout/cancel'
     })
         .then(session => {
+            let totalPrice = getTotalPrice(cart);
             res.render('shop/checkout', {
                 path: '/checkout',
                 pageTitle: 'Checkout',
-                cart: cart,
+                cart: {...cart, totalPrice: totalPrice},
                 sessionId: session.id
             })
         })
@@ -219,3 +220,11 @@ exports.getCheckoutSuccess = async (req, res, next) => {
         return next(new Error(error));
     }
 };
+
+function getTotalPrice(cart) {
+    let totalPrice = 0;
+    for (const product of cart.products) {
+        totalPrice += product.productId.price * product.quantity;
+    }
+    return totalPrice;
+}

@@ -69,6 +69,7 @@ userSchema.methods.removeFromCart = async function (prodId) {
  * after creation of the order empty the cart
  */
 userSchema.methods.addOrder = async function () {
+    this.cart.totalPrice = getTotalPrice(await this.getCart());
     const order = await new Order({userId: this._id, cart: this.cart})
     this.cart.products = [];
     this.cart.totalPrice = 0;
@@ -83,5 +84,11 @@ userSchema.methods.getAllOrders = async function () {
     return Order.find({userId: this._id}).populate("cart.products.productId").exec();
 }
 
-
+function getTotalPrice(cart) {
+    let totalPrice = 0;
+    for (const product of cart.products) {
+        totalPrice += product.productId.price * product.quantity;
+    }
+    return totalPrice;
+}
 module.exports = new mongoose.model("User", userSchema);
