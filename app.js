@@ -126,7 +126,9 @@ app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
     console.log(error);
-    // req.flash('error', error.message);
+    if(req.flash){
+        req.flash('error', error.message);
+    }
     return res.redirect("/500");
 })
 
