@@ -205,6 +205,7 @@ exports.getCheckout = async (req, res, next) => {
                 sessionId: session.id
             })
         })
+        .catch(err => next(new Error(err)));
 };
 
 /**

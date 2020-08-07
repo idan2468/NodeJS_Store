@@ -51,7 +51,7 @@ exports.postAddProduct = async (req, res, next) => {
     try{
         let localImagePath = req.file.path.replace('\\', '/');
         const imageCloud = await cloudinary.uploader.upload(localImagePath);
-        // await fs.unlink(localImagePath, err => err ? console.log(err) : null);
+        // await fs.unlink(localImagePath, err => err ? console.log(err) : null); already delete while dyno get sleep
         let newProduct = new Product({
             title: title,
             userId: userId,
