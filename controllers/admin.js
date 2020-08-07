@@ -30,7 +30,6 @@ exports.getAddProduct = (req, res, next) => {
  * Render HTML: admin/edit-product
  */
 exports.postAddProduct = async (req, res, next) => {
-    console.log("test")
     const title = req.body.title;
     const image = req.file;
     const price = req.body.price;
@@ -49,22 +48,20 @@ exports.postAddProduct = async (req, res, next) => {
             errorFields: errorFields
         });
     }
-    try {
+    try{
         let localImagePath = req.file.path.replace('\\', '/');
-        let path2 = path.join(__dirname, '..', localImagePath);
-        // console.log(path2);
-        // const imageCloud = await cloudinary.uploader.upload(path2);
+        const imageCloud = await cloudinary.uploader.upload(localImagePath);
         // await fs.unlink(localImagePath, err => err ? console.log(err) : null);
         let newProduct = new Product({
             title: title,
             userId: userId,
             price: price,
             description: description,
-            imageUrl: localImagePath
+            imageUrl: imageCloud.secure_url
         });
         await newProduct.save();
         res.redirect("/admin/products")
-    } catch (err) {
+    }catch(err){
         throw new Error(err);
     }
 };

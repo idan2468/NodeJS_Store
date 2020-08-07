@@ -61,7 +61,6 @@ app.use(helmet({
 app.use(compression());
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(flash());
 app.use(multer({storage: fileStorage, fileFilter: fileFilterFunc}).single('image'));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/images', express.static(path.join(__dirname, "images")));
@@ -76,7 +75,7 @@ app.use(session({
     store: mongoStore
 }));
 
-
+app.use(flash());
 app.use(csrfProtection);
 
 /**
@@ -137,5 +136,8 @@ app.use((error, req, res, next) => {
  */
 mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true})
     .then((res) => {
+        if(!fs.existsSync('images')){
+            fs.mkdirSync('images');
+        }
         app.listen(process.env.PORT || 3000);
     });
