@@ -36,7 +36,6 @@ exports.postAddProduct = async (req, res, next) => {
     const description = req.body.description;
     const userId = req.user._id;
     const errors = validationResult(req);
-
     if (!errors.isEmpty() || !image) {
         const oldValues = errorHandlers.getOldValuesByFields(ADD_PRODUCT_FIELDS, req)
         const errorFields = errorHandlers.getErrorFields(errors);
@@ -49,21 +48,24 @@ exports.postAddProduct = async (req, res, next) => {
             errorFields: errorFields
         });
     }
-    console.log(image)
-    let localImagePath = req.file.path.replace('\\', '/');
-    let path2 = path.join(__dirname,'..',localImagePath);
-    console.log(path2);
-    const imageCloud = await cloudinary.uploader.upload(path2,(err,result) => next(new Error(err)));
-    // await fs.unlink(localImagePath, err => err ? console.log(err) : null);
-    let newProduct = new Product({
-        title: title,
-        userId: userId,
-        price: price,
-        description: description,
-        imageUrl: imageCloud.secure_url
-    });
-    newProduct.save().then(() => res.redirect("/admin/products"))
-        .catch(err => next(new Error(err)));
+    try {
+        let localImagePath = req.file.path.replace('\\', '/');
+        let path2 = path.join(__dirname, '..', localImagePath);
+        console.log(path2);
+        const imageCloud = await cloudinary.uploader.upload(path2);
+        // await fs.unlink(localImagePath, err => err ? console.log(err) : null);
+        let newProduct = new Product({
+            title: title,
+            userId: userId,
+            price: price,
+            description: description,
+            imageUrl: imageCloud.secure_url
+        });
+        await newProduct.save();
+        res.redirect("/admin/products")
+    } catch (err) {
+        throw new Error(err);
+    }
 };
 
 /**
