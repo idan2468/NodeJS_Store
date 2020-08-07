@@ -49,9 +49,9 @@ exports.postAddProduct = async (req, res, next) => {
             errorFields: errorFields
         });
     }
-    const localImagePath = req.file.path.replace('\\','/');
+    const localImagePath = req.file.path.replace('\\', '/');
     const imageCloud = await cloudinary.uploader.upload(localImagePath);
-    await fs.unlink(localImagePath,err => err ? console.log(err) : null);
+    await fs.unlink(localImagePath, err => err ? console.log(err) : null);
     let newProduct = new Product({
         title: title,
         userId: userId,
@@ -116,8 +116,9 @@ exports.postEditProduct = async (req, res, next) => {
     let filePath = await Product.findById(req.body.productId);
     if (req.file) {
         // delete file from cloudniary
-        // filePath = path.join(__dirname, '..', filePath.imageUrl);
-        // fs.unlink(filePath, err => err ? console.log(err) : null);
+        const imageToDelete = filePath.imageUrl.split('/').pop().split('.')[0];
+        await cloudinary.v2.api.delete_resources([imageToDelete], (err, result) =>
+            err ? console.log(err) : console.log(result));
         filePath = req.file.path.replace('\\', '/');
         filePath = await cloudinary.uploader.upload(filePath)
         filePath = filePath.secure_url
@@ -163,8 +164,9 @@ exports.deleteProduct = async (req, res, next) => {
     try {
         const productToDelete = await Product.findById(prodId);
         removeRef(productToDelete);
-        const filePath = path.join(__dirname, '..', productToDelete.imageUrl);
-        fs.unlink(filePath, err => err ? console.log(err) : null);
+        const imageToDelete = productToDelete.imageUrl.split('/').pop().split('.')[0];
+        await cloudinary.v2.api.delete_resources([imageToDelete], (err, result) =>
+            err ? console.log(err) : console.log(result));
         await Product.findByIdAndDelete(prodId);
         res.status(200).json({message: "Success"});
     } catch (e) {
