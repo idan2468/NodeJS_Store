@@ -49,8 +49,8 @@ exports.postAddProduct = async (req, res, next) => {
             errorFields: errorFields
         });
     }
-    const localImagePath = req.file.path.replace('\\', '/');
-    const imageCloud = await cloudinary.uploader.upload(localImagePath);
+    // const localImagePath = req.file.path.replace('\\', '/');
+    const imageCloud = await cloudinary.uploader.upload(req.file.path);
     await fs.unlink(localImagePath, err => err ? console.log(err) : null);
     let newProduct = new Product({
         title: title,
