@@ -28,7 +28,7 @@ const fileStorage = multer.diskStorage({
         cb(null, 'images');
     }
     , filename: (req, file, cb) => {
-        const fileNameStr = file.originalname;
+        const fileNameStr = Date.now() + " - " + file.originalname;
         cb(null, fileNameStr);
     }
 });
@@ -58,6 +58,8 @@ app.set("views", "views");
 app.use(helmet({
     contentSecurityPolicy: false
 }));
+app.use(csrfProtection);
+app.use(flash());
 app.use(compression());
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -76,8 +78,7 @@ app.use(session({
 }));
 
 
-app.use(csrfProtection);
-app.use(flash());
+
 
 /**
  * Handle getting mongoose user object by the current session
