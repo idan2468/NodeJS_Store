@@ -7,6 +7,7 @@
     "MONGO_DB": "shop",
     "ADMIN_EMAIL": "idans2468@gmail.com",
     "SEND_GRID_API_KEY": "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",
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "CLOUDINARY_URL": "cloudinary://775649193356441:Q5fv43kzxznVaR5xlfuz999-UuU@hqgl0pisk"
   }
 }

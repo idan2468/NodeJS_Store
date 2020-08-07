@@ -5,6 +5,7 @@ const User = new require('../models/user');
 const Order = new require('../models/order');
 const errorHandlers = require('../util/errorHandlers');
 const fs = require('fs');
+const cloudinary = require('cloudinary');
 
 const ADD_PRODUCT_FIELDS = ["title", 'price', 'description'];
 const EDIT_PRODUCT_FIELDS = [...ADD_PRODUCT_FIELDS, "imageUrl"];
@@ -48,13 +49,15 @@ exports.postAddProduct = async (req, res, next) => {
             errorFields: errorFields
         });
     }
-
+    const localImagePath = req.file.path.replace('\\','/');
+    const imageCloud = await cloudinary.uploader.upload(localImagePath);
+    await fs.unlink(localImagePath,err => err ? console.log(err) : null);
     let newProduct = new Product({
         title: title,
         userId: userId,
         price: price,
         description: description,
-        imageUrl: image.path.replace('\\', '/')
+        imageUrl: imageCloud.secure_url
     });
     newProduct.save().then(() => res.redirect("/admin/products"))
         .catch(err => next(new Error(err)));
@@ -112,9 +115,12 @@ exports.postEditProduct = async (req, res, next) => {
     }
     let filePath = await Product.findById(req.body.productId);
     if (req.file) {
-        filePath = path.join(__dirname, '..', filePath.imageUrl);
-        fs.unlink(filePath, err => err ? console.log(err) : null);
-        filePath = req.file.path
+        // delete file from cloudniary
+        // filePath = path.join(__dirname, '..', filePath.imageUrl);
+        // fs.unlink(filePath, err => err ? console.log(err) : null);
+        filePath = req.file.path.replace('\\', '/');
+        filePath = await cloudinary.uploader.upload(filePath)
+        filePath = filePath.secure_url
     } else {
         filePath = filePath.imageUrl;
     }
@@ -122,7 +128,7 @@ exports.postEditProduct = async (req, res, next) => {
         title: req.body.title,
         price: req.body.price,
         description: req.body.description,
-        imageUrl: filePath.replace('\\', '/')
+        imageUrl: filePath
     })
         .then(() => {
             res.redirect("/admin/products");
