@@ -48,7 +48,7 @@ exports.postAddProduct = async (req, res, next) => {
             errorFields: errorFields
         });
     }
-    try{
+    try {
         let localImagePath = req.file.path.replace('\\', '/');
         const imageCloud = await cloudinary.uploader.upload(localImagePath);
         // await fs.unlink(localImagePath, err => err ? console.log(err) : null); already delete while dyno get sleep
@@ -61,7 +61,7 @@ exports.postAddProduct = async (req, res, next) => {
         });
         await newProduct.save();
         res.redirect("/admin/products")
-    }catch(err){
+    } catch (err) {
         throw new Error(err);
     }
 };
@@ -214,3 +214,4 @@ const removeRelatedElements = (err, elements, productToDelete) => {
         });
     }
 };
+

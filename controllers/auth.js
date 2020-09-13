@@ -202,7 +202,7 @@ exports.postResetPassword = (req, res, next) => {
                             from: ADMIN_EMAIL,
                             subject: "Reset Password",
                             html: `<p> You requested a password reset!!</p>
-                      <p> To reset password click <a href='http://localhost:3000/reset/${token}'> Here </a> </p>`
+                      <p> To reset password click <a href='${req.protocol + "://" + req.get('host')}/reset/${token}'> Here </a> </p>`
                         });
                     })
                     .catch(error => next(new Error(error)))
