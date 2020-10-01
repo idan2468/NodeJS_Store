@@ -4,7 +4,7 @@
 const mongoDB = require("mongodb");
 const mongoClient = mongoDB.MongoClient;
 
-const DB_CONNECTION_STR = "mongodb+srv://idan2468:0509496620@idans-xvear.mongodb.net/shop?retryWrites=true&w=majority";
+const DB_CONNECTION_STR = 'NOT RELEVANT';
 
 let _db;
 const mongoConnect = (callback) => {
